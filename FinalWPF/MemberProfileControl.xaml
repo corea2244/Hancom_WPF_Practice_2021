@@ -1,0 +1,249 @@
+﻿<UserControl x:Class="FinalWPF.MemberProfileControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FinalWPF"
+             xmlns:convert="clr-namespace:FinalWPF.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="650" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+        <convert:ReverseVisibility x:Key="ReverseVisibility"/>
+        <convert:BrushColorConverter x:Key="BrushColorConverter"/>
+    </UserControl.Resources>
+    <Grid Style="{StaticResource MemberProfileLayoutStyle}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="0" Style="{StaticResource MemberProfileNavLayoutStyle}">
+            <StackPanel>
+                <TextBlock Style="{StaticResource MemberProfileNavHeadTitleStyle}"></TextBlock>
+                <ScrollViewer Style="{StaticResource MemberProfileNavScrollViewerStyle}">
+                    <ItemsControl ItemsSource="{Binding UsersGroup}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <Button x:Name="NavButton" Visibility="{Binding NavGroupButtonVisibility, Converter={StaticResource BoolToVisibility}}" Command="{Binding DataContext.NavGroupButtonCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding}" Content="{Binding UserGroupTitle}" Style="{StaticResource MemberProfileNavButtonStyle}"/>
+                                    <Button x:Name="SelectedNavButton" Visibility="{Binding NavGroupButtonVisibility, Converter={StaticResource ReverseVisibility}}" Command="{Binding DataContext.NavGroupButtonCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding}" Content="{Binding UserGroupTitle}" Style="{StaticResource MemberProfileSelectedNavButtonStyle}"/>
+                                    <ItemsControl ItemsSource="{Binding UsersMember}" Visibility="{Binding NavGroupButtonVisibility, Converter={StaticResource ReverseVisibility}}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Content="{Binding MemberName}" Command="{Binding DataContext.NavMemberButtonCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding}" Style="{StaticResource MemberProfileNavSubButtonStyle}" Foreground="{Binding MemberSelected, Converter={StaticResource BrushColorConverter}}"></Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </StackPanel>
+        </Border>
+        <Border Grid.Column="1" Style="{StaticResource MemberProfileContentBorderStyle}">
+            <Grid Margin="0 30 0 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="400"></RowDefinition>
+                    <RowDefinition Height="40"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Style="{StaticResource MemberProfileListContentAreaStyle}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="60"></RowDefinition>
+                        <RowDefinition Height="100"></RowDefinition>
+                        <RowDefinition Height="1"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="170"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MinWidth="50"></ColumnDefinition>
+                                <ColumnDefinition MinWidth="100"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Column="0" Source="Image/name.png" Style="{StaticResource MemberProfileContentsIconStyle}"></Image>
+                            <TextBlock Grid.Column="1" Text=" 이름:" Style="{StaticResource MemberProfileContentsTitleStyle}"></TextBlock>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <WrapPanel Style="{StaticResource MemberProfileContentsWrapPanelStyle}">
+                                <TextBlock Visibility="{Binding ModifyBoxVisibility, Converter={StaticResource BoolToVisibility}}" Text="{Binding SeenMember.MemberName}" Style="{StaticResource MemberProfileContentsTextBlockStyle}"></TextBlock>
+                                <TextBox Grid.Column="0" Visibility="{Binding ModifyBoxVisibility, Converter={StaticResource ReverseVisibility}}" Style="{StaticResource MemberProfileContentsTextBoxStyle}">
+                                    <TextBox.Text>
+                                        <Binding Path="SeenMember.MemberName" ValidatesOnExceptions="True" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <DataErrorValidationRule></DataErrorValidationRule>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                            </WrapPanel>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="170"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MinWidth="50"></ColumnDefinition>
+                                <ColumnDefinition MinWidth="100"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Column="0" Source="Image/gender.png" Style="{StaticResource MemberProfileContentsIconStyle}"></Image>
+                            <TextBlock Grid.Column="1" Text=" 성별:" Style="{StaticResource MemberProfileContentsTitleStyle}"></TextBlock>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <WrapPanel Style="{StaticResource MemberProfileContentsWrapPanelStyle}">
+                                <TextBlock Visibility="{Binding ModifyBoxVisibility, Converter={StaticResource BoolToVisibility}}" Text="{Binding SeenMember.MemberGender}" Style="{StaticResource MemberProfileContentsTextBlockStyle}"></TextBlock>
+                                <StackPanel Grid.Column="3" Grid.Row="0" Style="{StaticResource MemberProfileGenderBoxStyle}" Visibility="{Binding ModifyBoxVisibility, Converter={StaticResource ReverseVisibility}}">
+                                    <RadioButton Style="{StaticResource MemberRegisterGenderManBoxStyle}" IsChecked="{Binding SeenMember.MemberMan}"></RadioButton>
+                                    <RadioButton Style="{StaticResource MemberRegisterGenderWomanBoxStyle}" IsChecked="{Binding SeenMember.MemberWoman}"></RadioButton>
+                                    <RadioButton Style="{StaticResource MemberRegisterGenderNothingBoxStyle}" IsChecked="{Binding SeenMember.MemberNothing}"></RadioButton>
+                                </StackPanel>
+                            </WrapPanel>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="170"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MinWidth="50"></ColumnDefinition>
+                                <ColumnDefinition MinWidth="100"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Column="0" Source="Image/age.png" Style="{StaticResource MemberProfileContentsIconStyle}"></Image>
+                            <TextBlock Grid.Column="1" Text=" 나이:" Style="{StaticResource MemberProfileContentsTitleStyle}"></TextBlock>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <WrapPanel Style="{StaticResource MemberProfileContentsWrapPanelStyle}">
+                                <TextBlock Text="{Binding SeenMember.MemberAge}" Style="{StaticResource MemberProfileContentsTextBlockStyle}"></TextBlock>
+                            </WrapPanel>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="170"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MinWidth="50"></ColumnDefinition>
+                                <ColumnDefinition MinWidth="100"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Column="0" Source="Image/birth.png" Style="{StaticResource MemberProfileContentsIconStyle}"></Image>
+                            <TextBlock Grid.Column="1" Text=" 생년월일:" Style="{StaticResource MemberProfileContentsTitleStyle}"></TextBlock>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <WrapPanel Style="{StaticResource MemberProfileContentsWrapPanelStyle}">
+                                <TextBlock Visibility="{Binding ModifyBoxVisibility, Converter={StaticResource BoolToVisibility}}" Text="{Binding SeenMember.MemberShowBirth}" Style="{StaticResource MemberProfileContentsTextBlockStyle}"></TextBlock>
+                                <TextBox Visibility="{Binding ModifyBoxVisibility, Converter={StaticResource ReverseVisibility}}" Style="{StaticResource MemberProfileContentsTextBoxStyle}">
+                                    <TextBox.Text>
+                                        <Binding Path="SeenMember.MemberBirth" ValidatesOnExceptions="True" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <DataErrorValidationRule></DataErrorValidationRule>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                            </WrapPanel>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="170"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MinWidth="50"></ColumnDefinition>
+                                <ColumnDefinition MinWidth="100"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Column="0" Source="Image/phone.png" Style="{StaticResource MemberProfileContentsIconStyle}"></Image>
+                            <TextBlock Grid.Column="1" Text=" 휴대폰:" Style="{StaticResource MemberProfileContentsTitleStyle}"></TextBlock>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <WrapPanel Style="{StaticResource MemberProfileContentsWrapPanelStyle}">
+                                <TextBlock Visibility="{Binding ModifyBoxVisibility, Converter={StaticResource BoolToVisibility}}" Text="{Binding SeenMember.MemberPhone}" Style="{StaticResource MemberProfileContentsTextBlockStyle}"></TextBlock>
+                                <TextBox Visibility="{Binding ModifyBoxVisibility, Converter={StaticResource ReverseVisibility}}" Style="{StaticResource MemberProfileContentsTextBoxStyle}">
+                                    <TextBox.Text>
+                                        <Binding Path="SeenMember.MemberPhone" ValidatesOnExceptions="True" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <DataErrorValidationRule></DataErrorValidationRule>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                            </WrapPanel>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="170"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" VerticalAlignment="Top">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MinWidth="50"></ColumnDefinition>
+                                <ColumnDefinition MinWidth="100"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Column="0" Source="Image/house.png" Style="{StaticResource MemberProfileContentsIconStyle}" Margin="0 13 0 0"></Image>
+                            <TextBlock Grid.Column="1" Text=" 거주지:" Style="{StaticResource MemberProfileContentsTitleStyle}" Margin="0 13 0 0"></TextBlock>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <WrapPanel Style="{StaticResource MemberProfileContentsWrapPanelStyle}">
+                                <TextBlock Visibility="{Binding ModifyBoxVisibility, Converter={StaticResource BoolToVisibility}}" Text="{Binding SeenMember.MemberAddress}" Style="{StaticResource MemberProfileContentsTextBlockStyle}"></TextBlock>
+                                <TextBox Visibility="{Binding ModifyBoxVisibility, Converter={StaticResource ReverseVisibility}}" Style="{StaticResource MemberProfileContentsTextBoxStyle}">
+                                    <TextBox.Text>
+                                        <Binding Path="SeenMember.MemberAddress" ValidatesOnExceptions="True" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <DataErrorValidationRule></DataErrorValidationRule>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                            </WrapPanel>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="170"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" VerticalAlignment="Top">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MinWidth="50"></ColumnDefinition>
+                                <ColumnDefinition MinWidth="100"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Column="0" Source="Image/else.png" Style="{StaticResource MemberProfileContentsIconStyle}" Margin="0 13 0 0"></Image>
+                            <TextBlock Grid.Column="1" Text=" 비고:" Style="{StaticResource MemberProfileContentsTitleStyle}" Margin="0 13 0 0"></TextBlock>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <WrapPanel Style="{StaticResource MemberProfileContentsWrapPanelStyle}" VerticalAlignment="Top">
+                                <TextBlock Visibility="{Binding ModifyBoxVisibility, Converter={StaticResource BoolToVisibility}}" Text="{Binding SeenMember.MemberElse}" Style="{StaticResource MemberProfileContentsTextBlockStyle}"></TextBlock>
+                                <TextBox Visibility="{Binding ModifyBoxVisibility, Converter={StaticResource ReverseVisibility}}" Text="{Binding SeenMember.MemberElse}" Style="{StaticResource MemberProfileContentsTextBoxStyle}"></TextBox>
+                            </WrapPanel>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="7" Width="900"></Grid>
+                </Grid>
+                <Grid Grid.Row="1" Style="{StaticResource MemberProfileDeleteButtonAreaStyle}">
+                    <WrapPanel>
+                        <Button Content="수정하기" Visibility="{Binding ModifyBoxVisibility, Converter={StaticResource BoolToVisibility}}" Style="{StaticResource MemberProfileModifyButtonStyle}" Command="{Binding ModifyButtonCommand}"></Button>
+                        <Button Content="삭제하기" Visibility="{Binding ModifyBoxVisibility, Converter={StaticResource BoolToVisibility}}" Style="{StaticResource MemberProfileDeleteButtonStyle}" Command="{Binding RemoveButtonCommand}"></Button>
+                        <Button Content="완료" Visibility="{Binding ModifyBoxVisibility, Converter={StaticResource ReverseVisibility}}" Style="{StaticResource MemberProfileModifyButtonStyle}" Command="{Binding ModifyCompleteButtonCommand}"></Button>
+                        <Button Content="취소하기" Visibility="{Binding ModifyBoxVisibility, Converter={StaticResource ReverseVisibility}}" Style="{StaticResource MemberProfileDeleteButtonStyle}" Command="{Binding ModifyCancelButtonCommand}"></Button>
+                    </WrapPanel>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
